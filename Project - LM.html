@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LearnMate Space Edition</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  @keyframes tabTransition {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-tab-transition {
+  animation: tabTransition 0.6s ease-in-out;
+}
+
+  /* Particle Burst Effect */
+.burst-container {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00E5FF;
+  opacity: 0.8;
+  animation: particleMove 0.8s ease-out forwards;
+}
+
+@keyframes particleMove {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5) translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+@keyframes borderMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+ /* Glass Profile Card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 229, 255, 0.15);
+}
+
+.glass-card img {
+  border-radius: 50%;
+}
+
+.glass-card h2 {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.glass-card p {
+  font-size: 1.125rem; /* text-lg */
+  color: #fff;
+}
+
+
+/* Animated Border Glow */
+@keyframes border-glow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.animate-border-glow {
+  background-size: 200% 200%;
+  animation: border-glow 3s linear infinite;
+  border-radius: inherit;
+}
+
+/* Text Glow */
+@keyframes glow {
+  0% { text-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF; }
+  100% { text-shadow: 0 0 20px #FF4081, 0 0 40px #FF4081; }
+}
+.animate-glow {
+  animation: glow 1.8s ease-in-out infinite alternate;
+}
+
+  .glass-sidebar {
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-sidebar:hover {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+}
+  nav button {
+  position: relative;
+  overflow: hidden;
+}
+nav button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+  transition: all 0.4s ease;
+}
+nav button:hover::before {
+  left: 100%;
+}
+  .glass-card {
+  background: rgba(255,255,255,0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 229, 255, 0.3);
+}
+.animate-glow {
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  0% { text-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF; }
+  100% { text-shadow: 0 0 20px #FF4081, 0 0 40px #FF4081; }
+}
+  @keyframes fade-in {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.animate-fade-in {
+  animation: fade-in 0.8s ease-in-out;
+}
+
+:root {
+  --primary: #1B1F3B; /* Space Dark */
+  --secondary: #0D0D1A;
+  --accent: #8E24AA; /* Purple Accent */
+  --hover: #00E5FF; /* Neon Blue */
+  --bg: #0D0D1A;
+  --text: #E0E0E0;
+}
+
+/* Reset */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* Landing Page */
+.landing-container {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 40%, #0a0f2c, #000015);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+}
+
+/* Stars Background */
+.stars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%; /* Double for seamless scroll */
+  background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+  animation: moveStars 40s linear infinite, twinkle 3s infinite ease-in-out alternate;
+  opacity: 0.6;
+  filter: drop-shadow(0 0 6px #ffffff);
+  z-index: 0;
+}
+
+@keyframes moveStars {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); } /* Smooth loop */
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; filter: drop-shadow(0 0 3px #fff); }
+  50% { opacity: 0.8; filter: drop-shadow(0 0 8px #fff); }
+  100% { opacity: 0.4; filter: drop-shadow(0 0 4px #fff); }
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--hover);
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease, border 0.3s ease;
+  z-index: 9999;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.cursor-hover {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Buttons */
+.btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  z-index: 1;
+}
+.btn:hover {
+  background: var(--hover);
+  color: #000;
+  transform: scale(1.08);
+}
+
+/* Sidebar */
+.sidebar-logo img {
+  height: 60px;
+  margin-bottom: 20px;
+}
+.sidebar-btn {
+  display: block;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+.sidebar-btn:hover {
+  background: var(--hover);
+  color: #333;
+}
+
+/* Navbar (Dashboard) */
+nav {
+  background: var(--primary);
+  color: white;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="custom-cursor"></div>
+
+<script type="text/babel">
+function App() {
+  const [page,setPage]=React.useState("landing");
+  const [isLoggedIn,setIsLoggedIn]=React.useState(false);
+  const [role,setRole]=React.useState(""),[id,setId]=React.useState(""),[name,setName]=React.useState("");
+  const [view,setView]=React.useState("home");
+  const [lastLogin,setLastLogin]=React.useState("");
+
+  if(page==="landing") return <Landing onStart={()=>setPage("login")}/>; 
+
+  if(!isLoggedIn && page==="login"){
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-[var(--secondary)]">
+        <Login onLogin={(r,i,nm)=>{
+          setRole(r);setId(i);setName(nm||"User");setLastLogin(new Date().toLocaleString());
+          setIsLoggedIn(true);setPage("dashboard");
+        }}/>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[var(--secondary)]">
+      <TopNav view={view} setView={setView} logout={()=>{setIsLoggedIn(false);setPage("landing");}}/>
+<main className="p-4">
+  <div key={view} className="animate-tab-transition">
+    {view==="home"?(role==="student"
+      ?<StudentDashboard name={name} roll={id} lastLogin={lastLogin}/>
+      :<FacultyDashboard name={name} empId={id} lastLogin={lastLogin}/>
+    ):view==="ai-helper"?<AIDoubtHelper/>:
+      view==="notifications"?<Notifications/>:
+      view==="help"?<HelpSection/>:
+      <h2 className="text-2xl text-center font-bold mt-10">Coming Soon...</h2>}
+  </div>
+</main>
+    </div>
+  );
+}
+function handleStart(e, onStart) {
+  // Trigger the page change
+  onStart();
+
+  // Create a burst container
+  const burstContainer = document.createElement("div");
+  burstContainer.className = "burst-container";
+  document.body.appendChild(burstContainer);
+
+  // Position at click point
+  const x = e.clientX;
+  const y = e.clientY;
+
+  burstContainer.style.left = `${x}px`;
+  burstContainer.style.top = `${y}px`;
+
+  // Generate particles
+  for (let i = 0; i < 15; i++) {
+    const particle = document.createElement("div");
+    particle.className = "particle";
+
+    // Random directions
+    const angle = Math.random() * 360;
+    const distance = Math.random() * 100 + 30;
+    const xMove = Math.cos(angle) * distance + "px";
+    const yMove = Math.sin(angle) * distance + "px";
+
+    particle.style.setProperty("--x", xMove);
+    particle.style.setProperty("--y", yMove);
+
+    // Random color
+    const colors = ["#00E5FF", "#FF4081", "#8E24AA"];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    burstContainer.appendChild(particle);
+
+    // Remove after animation
+    particle.addEventListener("animationend", () => {
+      particle.remove();
+    });
+  }
+
+  // Remove container after animation
+  setTimeout(() => {
+    burstContainer.remove();
+  }, 1000);
+}
+
+
+/* Landing Page */
+function Landing({onStart}){
+  return(
+    <div className="landing-container">
+      <div className="stars"></div>
+      <h1 className="text-6xl font-extrabold mb-4 animate-bounce z-10">Welcome to LearnMate</h1>
+      <p className="text-xl mb-8 z-10">AI-powered platform for smart learning in a galaxy of knowledge</p>
+      <button className="btn get-started-btn z-10" onClick={(e) => handleStart(e, onStart)}>
+  Get Started
+</button>
+    </div>
+  );
+}
+
+/* Top Navigation after login */
+function TopNav({view,setView,logout}){
+  const menu=[
+    {id:"home",label:"Home"},
+    {id:"ai-helper",label:"AI Helper"},
+    {id:"notifications",label:"Notifications"},
+    {id:"help",label:"Help"}
+  ];
+
+  return(
+    <nav className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-[#0a0f2c] via-[#11142d] to-[#000015] text-white shadow-md border-b border-white/20 backdrop-blur-md relative">
+      {/* Logo & Title */}
+      <div className="flex items-center gap-3">
+        
+        <h1 className="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-[#00E5FF] to-[#FF4081] bg-clip-text text-transparent">
+          LearnMate
+        </h1>
+      </div>
+
+      {/* Menu Buttons */}
+      <div className="flex gap-3">
+        {menu.map(m=>(
+          <button 
+            key={m.id} 
+            onClick={()=>setView(m.id)} 
+            className={`relative px-5 py-2 rounded-lg font-semibold text-white transition-all duration-300 ${
+              view===m.id
+              ? "bg-gradient-to-r from-[#00E5FF] to-[#FF4081] text-black shadow-lg"
+              : "hover:text-[#00E5FF]"
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
+        <button 
+          onClick={logout} 
+          className="px-5 py-2 rounded-lg font-semibold bg-[#FF4081] hover:bg-[#FF80AB] transition-all duration-300">
+          Logout
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+/* Login */
+function Login({onLogin}){
+  const [type,setType]=React.useState("student");
+  const [id,setId]=React.useState("");
+  const [pw,setPw]=React.useState("");
+  const [nm,setNm]=React.useState("");
+
+  return(
+    <div className="min-h-screen w-full flex justify-center items-center bg-gradient-to-br from-[#0a0f2c] to-[#000015] relative overflow-hidden">
+      {/* Stars Background */}
+      <div className="stars"></div>
+
+      {/* Glassmorphic Card */}
+      <div className="relative z-10 p-8 w-full max-w-md bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg border border-white/20 animate-fade-in">
+       <div className="flex justify-center mb-6">
+  <img
+    src={
+      type === "student"
+        ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" // Student icon
+        : "https://cdn-icons-png.flaticon.com/512/1995/1995574.png" // Faculty icon
+    }
+    alt="Role Icon"
+    className="h-16"
+  />
+</div>
+        <h1 className="text-3xl font-extrabold text-white mb-6">Sign In</h1>
+
+        {/* Role Switch */}
+        <div className="flex justify-around mb-6">
+          <button 
+            onClick={()=>setType("student")} 
+            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+              type==="student"?"bg-[#8E24AA] text-white":"bg-gray-600 text-gray-200 hover:bg-[#00E5FF] hover:text-black"
+            }`}
+          >
+            Student
+          </button>
+          <button 
+            onClick={()=>setType("faculty")} 
+            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+              type==="faculty"?"bg-[#8E24AA] text-white":"bg-gray-600 text-gray-200 hover:bg-[#00E5FF] hover:text-black"
+            }`}
+          >
+            Faculty
+          </button>
+        </div>
+
+        {/* Form */}
+        <form 
+          onSubmit={e=>{
+            e.preventDefault();
+            if(!id||!pw)return alert("Fill all fields");
+            onLogin(type,id,nm);
+          }} 
+          className="space-y-4"
+        >
+          <input 
+            className="border border-gray-500 bg-black/30 text-white rounded-lg w-full px-4 py-3 focus:ring-2 focus:ring-[#00E5FF] outline-none transition-all" 
+            placeholder="Full Name" 
+            value={nm} 
+            onChange={e=>setNm(e.target.value)}
+          />
+          <input 
+            className="border border-gray-500 bg-black/30 text-white rounded-lg w-full px-4 py-3 focus:ring-2 focus:ring-[#00E5FF] outline-none transition-all" 
+            placeholder={type==="student"?"Roll Number":"Employee ID"} 
+            value={id} 
+            onChange={e=>setId(e.target.value)}
+          />
+          <input 
+            type="password" 
+            className="border border-gray-500 bg-black/30 text-white rounded-lg w-full px-4 py-3 focus:ring-2 focus:ring-[#00E5FF] outline-none transition-all" 
+            placeholder="Password" 
+            value={pw} 
+            onChange={e=>setPw(e.target.value)}
+          />
+          <button className="btn w-full bg-[#8E24AA] hover:bg-[#00E5FF] hover:text-black transition-all duration-300">Login</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
+
+/* Sidebar */
+function Sidebar({sections,active,setActive}){
+  const icons = {
+    profile: "👤",
+    timetable: "📅",
+    materials: "📚",
+    attendance: "✅",
+    results: "📊"
+  };
+
+  return(
+    <aside className="w-64 p-6 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg border border-white/20 glass-sidebar">
+      <h2 className="text-xl font-bold mb-6 text-white tracking-wide">Dashboard</h2>
+      <div className="space-y-3">
+        {sections.map(tab=>(
+          <button 
+            key={tab} 
+            onClick={()=>setActive(tab)} 
+            className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-left font-semibold text-white transition-all duration-300 ${
+              active===tab
+              ? "bg-gradient-to-r from-[#00E5FF] to-[#FF4081] text-black shadow-lg scale-105"
+              : "hover:bg-white/10 hover:scale-105"
+            }`}
+          >
+            <span>{icons[tab] || "⭐"}</span>
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+          </button>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+
+/* Student Dashboard */
+function StudentDashboard({name,roll,lastLogin}){
+  const [section,setSection]=React.useState("profile");
+  const attendanceData=[
+    {subject:"Math",total:40,attended:32},
+    {subject:"DS",total:42,attended:34},
+    {subject:"Python",total:38,attended:30}
+  ];
+  const overallPct=Math.round(attendanceData.reduce((s,a)=>s+(a.attended/a.total)*100,0)/attendanceData.length);
+
+  React.useEffect(()=>{
+    if(section==="attendance"){
+      const ctx=document.getElementById("studentPie");
+      if(ctx){
+        new Chart(ctx,{
+          type:"pie",
+          data:{
+            labels:["Present","Absent"],
+            datasets:[{
+              data:[overallPct,100-overallPct],
+              backgroundColor:["#00E5FF","#FF4081"]
+            }]
+          }
+        });
+      }
+    }
+  },[section]);
+
+  return(
+    <div className="flex gap-6 mt-6 bg-gradient-to-br from-[#0a0f2c] to-[#000015] min-h-screen text-white p-6 rounded-xl">
+      {/* Sidebar */}
+      <Sidebar sections={["profile","timetable","materials","attendance","results"]} active={section} setActive={setSection}/>
+
+      {/* Content */}
+      <div className="flex-1">
+      {section === "profile" && (
+  <div className="relative glass-card p-8 rounded-2xl shadow-lg text-white overflow-hidden">
+    <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl p-6 flex flex-col items-center gap-6 border border-white/20 shadow-inner">
+      
+      {/* Avatar */}
+      <div className="w-32 h-32 rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8E24AA] p-[3px]">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+          alt="Avatar"
+          className="w-full h-full rounded-full object-cover"
+        />
+      </div>
+
+      {/* Profile Info */}
+      <h2 className="text-3xl font-bold tracking-wide">{name}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg w-full mt-4">
+        <p><span className="text-[#00E5FF] font-semibold">Roll No:</span> {roll}</p>
+        <p><span className="text-[#FF4081] font-semibold">Department:</span> CSE</p>
+        <p><span className="text-[#00E5FF] font-semibold">Year:</span> 3rd Year</p>
+        <p><span className="text-[#FF4081] font-semibold">Semester:</span> 6th Sem</p>
+        <p><span className="text-[#00E5FF] font-semibold">Email:</span> {roll.toLowerCase()}@learnmate.com</p>
+        <p><span className="text-[#FF4081] font-semibold">Phone:</span> +91 9876543210</p>
+        <p><span className="text-[#00E5FF] font-semibold">Last Login:</span> {lastLogin}</p>
+      </div>
+    </div>
+  </div>
+)}
+
+        {section==="attendance" && (
+          <div className="glass-card p-6 rounded-xl shadow-lg text-white">
+            <h3 className="text-2xl font-bold mb-4">Attendance Overview</h3>
+            <p className="mb-4 text-lg">Overall: <span className="font-bold">{overallPct}%</span></p>
+            <canvas id="studentPie" className="max-w-xs"></canvas>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+/* Faculty Dashboard */
+function FacultyDashboard({ name, empId, lastLogin }) {
+  const [section, setSection] = React.useState("profile");
+
+  return (
+    <div className="flex gap-6 mt-6 bg-gradient-to-br from-[#0a0f2c] to-[#000015] min-h-screen text-white p-6 rounded-xl">
+      {/* Sidebar */}
+      <Sidebar
+        sections={["profile", "timetable", "materials", "attendance", "student details"]}
+        active={section}
+        setActive={setSection}
+      />
+
+      {/* Main Content */}
+      <div className="flex-1">
+        {section === "profile" && (
+  <div className="relative glass-card p-8 rounded-2xl shadow-lg text-white overflow-hidden">
+    <div className="relative bg-black/40 backdrop-blur-xl rounded-2xl p-6 flex flex-col items-center gap-6 border border-white/20 shadow-inner">
+      
+      {/* Avatar */}
+      <div className="w-32 h-32 rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8E24AA] p-[3px]">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+          alt="Avatar"
+          className="w-full h-full rounded-full object-cover"
+        />
+      </div>
+
+      {/* Profile Info */}
+      <h2 className="text-3xl font-bold tracking-wide">{name}</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg w-full mt-4">
+        <p><span className="text-[#00E5FF] font-semibold">Employee ID:</span> {empId}</p>
+        <p><span className="text-[#FF4081] font-semibold">Department:</span> Computer Science</p>
+        <p><span className="text-[#00E5FF] font-semibold">Specialization:</span> Artificial Intelligence</p>
+        <p><span className="text-[#FF4081] font-semibold">Email:</span> {empId.toLowerCase()}@learnmate.com</p>
+        <p><span className="text-[#00E5FF] font-semibold">Phone:</span> +91 9876501234</p>
+        <p><span className="text-[#FF4081] font-semibold">Last Login:</span> {lastLogin}</p>
+      </div>
+    </div>
+  </div>
+)}
+
+        {section === "attendance" && (
+          <div className="glass-card p-6 rounded-xl shadow-lg text-white">
+            <h3 className="text-2xl font-bold mb-4">Manage Attendance</h3>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Notifications() {
+  const [notifications, setNotifications] = React.useState([
+    { id: 1, text: "Python assignment due tomorrow!", type: "Assignment", time: "2 hrs ago", read: false },
+    { id: 2, text: "New materials uploaded for DBMS", type: "Material", time: "4 hrs ago", read: false },
+    { id: 3, text: "Upcoming exam schedule released", type: "Announcement", time: "Yesterday", read: true }
+  ]);
+
+  const markAllRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, read: true })));
+  };
+
+  const clearAll = () => {
+    setNotifications([]);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto mt-6 p-6 rounded-2xl glass-card shadow-lg text-white">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-3xl font-bold">Notifications</h2>
+        <div className="flex gap-3">
+          <button onClick={markAllRead} className="px-4 py-2 rounded-lg bg-[#00E5FF] text-black hover:bg-[#FF4081] transition">
+            Mark All Read
+          </button>
+          <button onClick={clearAll} className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition">
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      {notifications.length === 0 ? (
+        <p className="text-center text-gray-300">No new notifications 🎉</p>
+      ) : (
+        <div className="space-y-4">
+          {notifications.map(n => (
+            <div key={n.id} className="flex justify-between items-center p-4 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 hover:scale-105 transition transform">
+              <div>
+                <p className="font-semibold text-lg">{n.text}</p>
+                <p className="text-sm text-gray-300">{n.type} • {n.time}</p>
+              </div>
+              {!n.read && <span className="w-3 h-3 bg-[#00E5FF] rounded-full"></span>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+function HelpSection() {
+  return (
+    <div className="max-w-2xl mx-auto mt-10 glass-card p-8 rounded-2xl shadow-xl text-white text-center animate-fade-in">
+      {/* Header */}
+      <h2 className="text-4xl font-extrabold mb-4 bg-gradient-to-r from-[#00E5FF] to-[#FF4081] bg-clip-text text-transparent">
+        Need Help?
+      </h2>
+      <p className="text-lg text-gray-300 mb-6">
+        We're here to assist you on your learning journey.
+      </p>
+
+      {/* Contact Options */}
+      <div className="flex flex-col gap-4 mb-6">
+        <a
+          href="mailto:support@learnmate.com"
+          className="flex items-center justify-center gap-3 px-6 py-3 rounded-xl bg-[#00E5FF] text-black font-semibold transition transform hover:scale-105 hover:bg-[#FF4081]"
+        >
+          📧 Email Us — support@learnmate.com
+        </a>
+        <a
+          href="tel:+919876543210"
+          className="flex items-center justify-center gap-3 px-6 py-3 rounded-xl bg-[#8E24AA] text-white font-semibold transition transform hover:scale-105 hover:bg-[#00E5FF] hover:text-black"
+        >
+          📞 Call Us — +91 98765 43210
+        </a>
+      </div>
+
+      {/* Support Links */}
+      <div className="grid grid-cols-2 gap-4 mt-6 text-sm">
+        <a
+          href="#faq"
+          className="p-4 bg-white/10 backdrop-blur rounded-xl border border-white/20 hover:scale-105 transition"
+        >
+          📚 Frequently Asked Questions
+        </a>
+        <a
+          href="#docs"
+          className="p-4 bg-white/10 backdrop-blur rounded-xl border border-white/20 hover:scale-105 transition"
+        >
+          🧠 LearnMate User Guide
+        </a>
+      </div>
+
+      {/* Decorative Image */}
+      <div className="mt-8">
+        <img
+          src="https://cdn.dribbble.com/users/2046015/screenshots/15511339/media/10312fc66b3e003418f03fd0d331c537.png"
+          alt="Support Illustration"
+          className="mx-auto max-w-xs opacity-90"
+        />
+      </div>
+    </div>
+  );
+}
+
+
+/* AI Doubt Helper */
+function AIDoubtHelper() {
+  const [question, setQuestion] = React.useState("");
+  const [response, setResponse] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const askAI = () => {
+    if (!question) return;
+    setLoading(true);
+    setResponse("");
+    setTimeout(() => {
+      setResponse("✨ This is a sample AI response. Integrate API here.");
+      setLoading(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="relative glass-card max-w-3xl mx-auto mt-10 p-8 rounded-2xl shadow-lg text-white bg-gradient-to-br from-[#0a0f2c] to-[#000015] border border-white/10 animate-fade-in">
+      
+      {/* Header */}
+      <h2 className="text-4xl font-extrabold mb-4 text-center bg-gradient-to-r from-[#00E5FF] to-[#FF4081] bg-clip-text text-transparent">
+        AI Doubt Helper 
+      </h2>
+      <p className="text-lg text-gray-300 mb-8 text-center">
+        Ask your academic questions and get instant AI-powered answers!
+      </p>
+
+      {/* Input Area */}
+      <textarea
+        className="w-full bg-black/40 text-white rounded-xl p-4 mb-6 border border-white/20 focus:ring-2 focus:ring-[#00E5FF] outline-none resize-none transition-all"
+        rows="4"
+        placeholder="Type your question here..."
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+      ></textarea>
+
+      {/* Ask Button */}
+      <button
+        onClick={askAI}
+        className="w-full py-3 rounded-xl font-bold text-lg bg-gradient-to-r from-[#8E24AA] to-[#00E5FF] hover:scale-105 hover:shadow-lg transition-all"
+      >
+        {loading ? "Thinking..." : "Ask AI"}
+      </button>
+
+      {/* Loader */}
+      {loading && (
+        <div className="mt-6 flex justify-center items-center gap-2 text-[#00E5FF]">
+          <span className="w-3 h-3 bg-[#00E5FF] rounded-full animate-bounce"></span>
+          <span className="w-3 h-3 bg-[#FF4081] rounded-full animate-bounce delay-150"></span>
+          <span className="w-3 h-3 bg-[#8E24AA] rounded-full animate-bounce delay-300"></span>
+        </div>
+      )}
+
+      {/* Response Box */}
+      {response && (
+        <div className="mt-6 bg-black/40 p-4 rounded-xl border border-white/10 text-lg leading-relaxed">
+          <p className="text-[#00E5FF] font-semibold">AI Response:</p>
+          <p>{response}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+
+/* Render */
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+/* Custom Cursor */
+const cursor=document.querySelector('.custom-cursor');
+document.addEventListener('mousemove',e=>{cursor.style.top=`${e.clientY}px`;cursor.style.left=`${e.clientX}px`;});
+document.querySelectorAll('button,a,input,textarea').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('cursor-hover'));el.addEventListener('mouseleave',()=>cursor.classList.remove('cursor-hover'));});
+</script>
+</body>
+</html>
